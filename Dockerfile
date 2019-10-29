@@ -4,16 +4,14 @@ ENV GRADLE_HOME=/opt/src/gradle \
    CHROME_BIN=/usr/bin/chromium-browser \
    CHROME_PATH=/usr/lib/chromium/
 RUN apk update \
-   && apk add --no-cache --update-cache git openssh chromium-chromedriver chromium \
-   && mkdir -p /root/.ssh \
-   && ssh-keyscan -H github.com >> /root/.ssh/known_hosts \
-   && ssh-keyscan -H github.avaldigitallabs.com >> /root/.ssh/known_hosts \
-   && wget -O gradle.zip “https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip” \
-   && echo “${GRADLE_SHA256} *gradle.zip” | sha256sum -c - \
-   && unzip gradle.zip \
-   && rm -f gradle.zip \
-   && mkdir -p /opt/src \
-   && mv “gradle-${GRADLE_VERSION}” “${GRADLE_HOME}” \
-   && ln -s “${GRADLE_HOME}/bin/gradle” /usr/bin/gradle \
-   && gradle --version \
-   && rm -rf /tmp/ /var/cache/apk/
+&& apk add --no-cache --update-cache git openssh chromium-chromedriver chromium \
+&& wget -O gradle.zip https://services.gradle.org/distributions/gradle-5.4.1-bin.zip \
+&& unzip gradle.zip \
+&& rm -f gradle.zip \
+&& mkdir -p /opt/src/gradle \
+&& mv gradle-5.4.1/* /opt/src/gradle/ \
+&& ln -s /opt/src/gradle/bin/gradle /usr/bin/gradle \
+&& gradle --version \
+&& rm -rf /tmp/ /var/cache/apk/ 
+
+CMD ["gradle", "--version"]
